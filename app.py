@@ -6,6 +6,7 @@ from copy import deepcopy
 from collections import defaultdict
 
 
+
 match_id = "CSGO-sbj5L-pkNZh-6KBj4-J8TJ8-ipxMM"
 cs = CloudScraper()
 
@@ -27,7 +28,7 @@ csdata_request = cs.get(match_upload_data['data']['url'])
 # %%
 
 data = []
-soup = BeautifulSoup(csdata_request.text)
+soup = BeautifulSoup(csdata_request.text, features="html.parser")
 
 #%%
 table = soup.find('table', attrs={'class': 'scoreboard'})
@@ -65,7 +66,7 @@ csdata_request = cs.get(match_upload_data['data']['url'] + '#/rounds')
 # %%
 clutches = {player: defaultdict(int) for player in team_1_teammates + team_2_teammates}
 data = []
-soup = BeautifulSoup(csdata_request.text)
+soup = BeautifulSoup(csdata_request.text, features="html.parser")
 data.append(['round', 'tick', 'killer', 'assist', 'weapon', 'headshot', 'killed'])
 for i, round_info_div in enumerate(soup.find_all('div', attrs={'class': 'round-info'})):
     team_1_alive = deepcopy(team_1_teammates)
