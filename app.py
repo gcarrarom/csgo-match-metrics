@@ -58,7 +58,7 @@ for row in team_2_table.find_all('tr')[1:]:
 for row in team_2_table.find_all('tr')[1:]:
     data.append([match_id, today, map_name] + [col.text.strip() for col in row.find_all('td')] + team_2_teammates)
 
-with open('total.csv', 'w') as file_writer:
+with open('total.csv', 'w', encoding="utf-8") as file_writer:
     file_writer.write("\n".join([",".join([col for col in row]) for row in data]))
 # %%
 
@@ -134,11 +134,11 @@ clutch_table.append(["MapID", "Date", "Map", "Player", "1v1", "1v2", "1v3", "1v4
 for player in clutches:
     clutch_table.append([match_id, today, map_name, player, clutches[player][1], clutches[player][2], clutches[player][3], clutches[player][4], clutches[player][5]])
 
-with open('clutches.csv', 'w') as fw:
+with open('clutches.csv', 'w', encoding="utf-8") as fw:
     fw.write("\n".join([",".join([str(col) for col in row]) for row in clutch_table]))
 
 
-with open('rounds.csv', 'w') as file_writer:
+with open('rounds.csv', 'w', encoding="utf-8") as file_writer:
     file_writer.write("\n".join([",".join([str(col) for col in row]) for row in data]))
 # %%
 #roud_info_divs[1].find_all('div', attrs={'class': 'tl-inner'})[0].find_all('span')
