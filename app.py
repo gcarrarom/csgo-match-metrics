@@ -6,23 +6,31 @@ from copy import deepcopy
 from collections import defaultdict
 from sys import argv
 
-match_id = argv[1]
 cs = CloudScraper()
 
-headers = {
-    "Content-Type": "application/x-www-form-urlencoded; charset=UTF-8"
-}
+if argv[1] == 'link':
+    match_data_url = argv[2]
+elif argv[1] == 'id':
+    match_id = argv[2]
 
-body = {
-    "sharecode": match_id
-}
+    headers = {
+        "Content-Type": "application/x-www-form-urlencoded; charset=UTF-8"
+    }
 
-test = cs.post(f"https://csgostats.gg/match/upload/ajax", data=body, headers=headers)
+    body = {
+        "sharecode": match_id
+    }
+
+    test = cs.post(f"https://csgostats.gg/match/upload/ajax", data=body, headers=headers)
 
 # %%
-match_upload_data = test.json()
+    match_upload_data = test.json()
 
-csdata_request = cs.get(match_upload_data['data']['url'])
+    match_data_url = match_upload_data['data']['url']
+else:
+    raise Exception("Please add Link or ID of the match!")
+
+csdata_request = cs.get(match_data_url)
 
 # %%
 
@@ -61,7 +69,7 @@ with open('total.csv', 'w', encoding="utf-8") as file_writer:
     file_writer.write("\n".join([",".join([col for col in row]) for row in data]))
 # %%
 
-csdata_request = cs.get(match_upload_data['data']['url'] + '#/rounds')
+csdata_request = cs.get(match_data_url + '#/rounds')
 # %%
 clutches = {player: defaultdict(int) for player in team_1_teammates + team_2_teammates}
 data = []
@@ -127,6 +135,15 @@ for i, round_info_div in enumerate(soup.find_all('div', attrs={'class': 'round-i
         # Appending row
         data.append(row)
 
+
+for round in soup.find_all('div', attrs={'class': 'round-score'}):
+    team_1_round = round.find('div', attrs={'class': 'team-0'})
+    team_2_round = round.find('div', attrs={'class': 'team-1'})
+
+    if "winner" in team_1_round['class']:
+        print("team 1 won!")
+    else:
+        print("team 2 won!")
 
 clutch_table = []
 clutch_table.append(["MapID", "Date", "Map", "Player", "1v1", "1v2", "1v3", "1v4", "1v5"])
