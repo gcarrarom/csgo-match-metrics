@@ -70,7 +70,8 @@ data.append(['round', 'tick', 'killer', 'assist', 'weapon', 'headshot', 'killed'
 for i, round_info_div in enumerate(soup.find_all('div', attrs={'class': 'round-info'})):
     team_1_alive = deepcopy(team_1_teammates)
     team_2_alive = deepcopy(team_2_teammates)
-    clutch = False
+    clutch_1 = False
+    clutch_2 = False
     for inner in round_info_div.find_all('div', attrs={'class': 'round-info-side'})[1].find_all('div', attrs={'class': 'tl-inner'}):
         row = []
         # Round number
@@ -107,20 +108,22 @@ for i, round_info_div in enumerate(soup.find_all('div', attrs={'class': 'round-i
         # Appending killed
         row.append(killed)
         
-        if not clutch:
+        if not clutch_1 or not clutch_2:
             if killed in team_2_alive:
                 team_2_alive.remove(killed)
             elif killed in team_1_alive:
                 team_1_alive.remove(killed)
-
-            if len(team_1_alive) == 1:
-                clutch = True
-                clutches[team_1_alive[0]][len(team_2_alive)] += 1
-                print(f"{team_1_alive[0]} did a 1v{len(team_2_alive)} clutch on the round {i+1}")
-            elif len(team_2_alive) == 1:
-                clutch = True
-                clutches[team_2_alive[0]][len(team_1_alive)] += 1
-                print(f"{team_2_alive[0]} did a 1v{len(team_1_alive)} clutch on the round {i+1}")
+            
+            if not clutch_1:
+                if len(team_1_alive) == 1:
+                    clutch_1 = True
+                    clutches[team_1_alive[0]][len(team_2_alive)] += 1
+                    print(f"{team_1_alive[0]} did a 1v{len(team_2_alive)} clutch on the round {i+1}")
+            if not clutch_2:
+                if len(team_2_alive) == 1:
+                    clutch_2 = True
+                    clutches[team_2_alive[0]][len(team_1_alive)] += 1
+                    print(f"{team_2_alive[0]} did a 1v{len(team_1_alive)} clutch on the round {i+1}")
         # Appending row
         data.append(row)
 
