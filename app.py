@@ -4,10 +4,9 @@ from bs4 import BeautifulSoup
 import re
 from copy import deepcopy
 from collections import defaultdict
+from sys import argv
 
-
-
-match_id = "CSGO-sbj5L-pkNZh-6KBj4-J8TJ8-ipxMM"
+match_id = argv[1]
 cs = CloudScraper()
 
 headers = {
