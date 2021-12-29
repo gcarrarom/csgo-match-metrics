@@ -125,9 +125,13 @@ for i, round_info_div in enumerate(soup.find_all('div', attrs={'class': 'round-i
         data.append(row)
 
 
-print(clutches)
+clutch_table = []
+clutch_table.append(["MapID", "Date", "Map", "Player", "1v1", "1v2", "1v3", "1v4", "1v5"])
+for player in clutches:
+    clutch_table.append([match_id, today, map_name, player, clutches[player][1], clutches[player][2], clutches[player][3], clutches[player][4], clutches[player][5]])
 
-
+with open('clutches.csv', 'w') as fw:
+    fw.write("\n".join([",".join([str(col) for col in row]) for row in clutch_table]))
 
 
 with open('rounds.csv', 'w') as file_writer:
