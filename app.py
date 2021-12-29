@@ -58,12 +58,12 @@ team_1_teammates = []
 for row in team_1_table.find_all('tr')[1:]:
     team_1_teammates.append(row.find_all('td')[0].text.strip())
 for row in team_1_table.find_all('tr')[1:]:
-    data.append([match_id, today, map_name] + [col.text.strip() for col in row.find_all('td')] + team_1_teammates)
+    data.append([match_data_url, today, map_name] + [col.text.strip() for col in row.find_all('td')] + team_1_teammates)
 team_2_teammates = []
 for row in team_2_table.find_all('tr')[1:]:
     team_2_teammates.append(row.find_all('td')[0].text.strip())
 for row in team_2_table.find_all('tr')[1:]:
-    data.append([match_id, today, map_name] + [col.text.strip() for col in row.find_all('td')] + team_2_teammates)
+    data.append([match_data_url, today, map_name] + [col.text.strip() for col in row.find_all('td')] + team_2_teammates)
 
 with open('total.csv', 'w', encoding="utf-8") as file_writer:
     file_writer.write("\n".join([",".join([col for col in row]) for row in data]))
@@ -148,7 +148,7 @@ for round in soup.find_all('div', attrs={'class': 'round-score'}):
 clutch_table = []
 clutch_table.append(["MapID", "Date", "Map", "Player", "1v1", "1v2", "1v3", "1v4", "1v5"])
 for player in clutches:
-    clutch_table.append([match_id, today, map_name, player, clutches[player][1], clutches[player][2], clutches[player][3], clutches[player][4], clutches[player][5]])
+    clutch_table.append([match_data_url, today, map_name, player, clutches[player][1], clutches[player][2], clutches[player][3], clutches[player][4], clutches[player][5]])
 
 with open('clutches.csv', 'w', encoding="utf-8") as fw:
     fw.write("\n".join([",".join([str(col) for col in row]) for row in clutch_table]))
