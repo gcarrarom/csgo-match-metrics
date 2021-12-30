@@ -136,14 +136,55 @@ for i, round_info_div in enumerate(soup.find_all('div', attrs={'class': 'round-i
         data.append(row)
 
 
+team_1_match = defaultdict(int)
+team_2_match = defaultdict(int)
+team_1_match['MatchID'] = match_data_url
+team_2_match['MatchID'] = match_data_url
+team_1_match['Date'] = today
+team_2_match['Date'] = today
+team_1_match['Map'] = map_name
+team_2_match['Map'] = map_name
 for round in soup.find_all('div', attrs={'class': 'round-score'}):
     team_1_round = round.find('div', attrs={'class': 'team-0'})
     team_2_round = round.find('div', attrs={'class': 'team-1'})
-
+    
     if "winner" in team_1_round['class']:
-        print("team 1 won!")
+        team_1_match['totalWon'] += 1
+        team_2_match['totalLost'] += 1
+        if 'side-CT' in team_1_round['class']:
+            team_1_match['WonCT'] += 1
+            team_2_match['LostTR'] += 1
+        else:
+            team_1_match['WonTR'] += 1
+            team_2_match['LostCT'] += 1
     else:
-        print("team 2 won!")
+        team_2_match['totalWon'] += 1
+        team_1_match['totalLost'] += 1
+        if 'side-CT' in team_2_round['class']:
+            team_2_match['WonCT'] += 1
+            team_1_match['LostTR'] += 1
+        else:
+            team_2_match['WonTR'] += 1
+            team_1_match['LostCT'] += 1
+
+print(team_1_match)
+print(team_2_match)
+rounds_table = []
+columns = ["MatchID", "Date", "Map", "totalWon", "totalLost", "WonCT", "LostCT", "WonTR", "LostTR"]
+rounds_table.append(columns)
+row_1 = []
+for column in columns:
+    row_1.append(team_1_match[column])
+    print(team_1_match[column])
+rounds_table.append(row_1)
+row_2 = []
+for column in columns:
+    print(team_2_match[column])
+    row_2.append(team_2_match[column])
+rounds_table.append(row_2)
+
+with open('match.csv', 'w', encoding="utf-8") as fw:
+    fw.write("\n".join([",".join([str(col) for col in row]) for row in rounds_table]))
 
 clutch_table = []
 clutch_table.append(["MapID", "Date", "Map", "Player", "1v1", "1v2", "1v3", "1v4", "1v5"])
