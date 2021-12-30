@@ -65,8 +65,7 @@ for row in team_2_table.find_all('tr')[1:]:
 for row in team_2_table.find_all('tr')[1:]:
     data.append([match_data_url, today, map_name] + [col.text.strip() for col in row.find_all('td')] + team_2_teammates)
 
-with open('total.csv', 'w', encoding="utf-8") as file_writer:
-    file_writer.write("\n".join([",".join([col for col in row]) for row in data]))
+to_write = "\n".join([",".join([col for col in row]) for row in data]) + "\n\n"
 # %%
 
 csdata_request = cs.get(match_data_url + '#/rounds')
@@ -183,16 +182,16 @@ for column in columns:
     row_2.append(team_2_match[column])
 rounds_table.append(row_2)
 
-with open('match.csv', 'w', encoding="utf-8") as fw:
-    fw.write("\n".join([",".join([str(col) for col in row]) for row in rounds_table]))
+to_write += "\n".join([",".join([str(col) for col in row]) for row in rounds_table]) + "\n\n"
 
 clutch_table = []
 clutch_table.append(["MapID", "Date", "Map", "Player", "1v1", "1v2", "1v3", "1v4", "1v5"])
 for player in clutches:
     clutch_table.append([match_data_url, today, map_name, player, clutches[player][1], clutches[player][2], clutches[player][3], clutches[player][4], clutches[player][5]])
 
-with open('clutches.csv', 'w', encoding="utf-8") as fw:
-    fw.write("\n".join([",".join([str(col) for col in row]) for row in clutch_table]))
+to_write += "\n".join([",".join([str(col) for col in row]) for row in clutch_table])
+with open('MatchInfo.csv', 'w', encoding="utf-8") as fw:
+    fw.write(to_write)
 
 
 with open('rounds.csv', 'w', encoding="utf-8") as file_writer:
