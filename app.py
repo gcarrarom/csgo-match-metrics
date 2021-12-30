@@ -46,7 +46,7 @@ team_1_table = table_body[0]
 team_2_table = table_body[2]
 
 date_to_convert = soup.find('div', attrs={'class', 'match-date-text'}).text
-date_found = re.findall(r'([0-9]{1,2})[thstrd]{1,2} ([a-zA-Z]{3}) ([0-9]{4})', date_to_convert)
+date_found = re.findall(r'([0-9]{1,2})[thstrdnd]{1,2} ([a-zA-Z]{3}) ([0-9]{4})', date_to_convert)
 
 today = f"{date_found[0][0]}-{date_found[0][1]}-{date_found[0][2]}"
 
